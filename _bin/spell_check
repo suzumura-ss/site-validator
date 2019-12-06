@@ -1,0 +1,26 @@
+#!/bin/bash
+
+spell_check() {
+    CHK=${1,,}
+    for T in `find _site/$CHK/ -type f`; do
+        cat $T | aspell --lang=$CHK --mode=html --personal=$PWD/_aspell/aspell.$CHK.pws list | sort | uniq > validate.result.part
+        if [[ `cat validate.result.part | wc -l` -ne 0 ]]; then
+            echo "$T ($CHK):" >> validate.result
+            cat validate.result.part >> validate.result
+        fi
+    done
+
+}
+
+rm -f validate.result
+spell_check en
+
+if [[ ! -f validate.result ]]; then
+    echo OK
+    RESULT=0
+else
+    cat validate.result
+    RESULT=1
+fi
+rm -f validate.result validate.result.part
+exit $RESULT

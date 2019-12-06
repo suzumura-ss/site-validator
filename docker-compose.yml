@@ -1,0 +1,14 @@
+version: '2'
+services:
+  html5validator:
+    image: suzumura/site-validator:latest
+    volumes:
+        # _site is default output directory of jekyll.
+        - "./:/tmp/target"
+    command: "html5validator --root _site"
+
+  spellcheck:
+    image: suzumura/site-validator:latest
+    volumes:
+        - "./:/tmp/target"
+    command: "./_bin/spell_check"
